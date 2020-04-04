@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tailwind CSS Class Search</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,700;1,400&family=Cousine:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/vue-virtual-scroller@1.0.4/dist/vue-virtual-scroller.css"
+    />
+    <link rel="stylesheet" href="tailwind.css" />
+  </head>
+  <body class="bg-353433 text-e9e8e7">
+    <div id="app" class="absolute inset-0 flex flex-col">
+      <div class="p-4 max-w-2xl flex-none">
+        <p class="py-2 px-3">
+          Having trouble memorizing all 12526 utility classes in Tailwind?
+          Remember the CSS code, but did not remember which is the corresponding
+          Tailwind CSS utility class? Search for it here!
+        </p>
+        <p>
+          <input
+            type="search"
+            v-model="searchText"
+            class="block w-full form-input bg-090807 border-454443 hover:border-656463 shadow placeholder-8b8685"
+            :placeholder="status"
+          />
+        </p>
+      </div>
+      <div
+        class="border-t border-656463 bg-454443 px-4 flex font-bold text-8b8685 text-sm uppercase"
+      >
+        <div class="w-1/4 flex-none px-3">
+          class
+        </div>
+        <div class="w-3/4 flex-none pr-3">
+          style
+        </div>
+      </div>
+      <div class="flex-1 overflow-scroll scrolling-touch">
+        <ul>
+          <li
+            v-for="entry of matchingEntries"
+            :key="entry.className"
+            class="border-t border-454443 px-4 pt-1 flex"
+          >
+            <div class="font-mono font-bold w-1/4 flex-none px-3 truncate">
+              <a
+                class="text-bbeeff -mx-1 px-1 -my-1 hover:text-black hover:bg-bbeeff"
+                href="javascript:"
+                @click="copyTextToClipboard(entry.className)"
+                >{{entry.className}}</a
+              >
+            </div>
+            <div class="font-mono w-3/4 flex-none pr-3">
+              <div
+                v-for="result of entry.results"
+                :title="result.key"
+                class="truncate"
+              >
+                {{result.css}}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script src="https://unpkg.com/css-tree@1.0.0-alpha.39/dist/csstree.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue-virtual-scroller@1.0.4/dist/vue-virtual-scroller.min.js"></script>
+    <script src="https://unpkg.com/fuzzysort@1.1.4/fuzzysort.js"></script>
+    <script>
+      vm = new Vue({
+        el: '#app',
+        data: {
+          search: () => [],
+          status: 'Loading Tailwind CSS source...',
+          searchText: '',
+        },
+        computed: {
+          matchingEntries() {
+            return this.search(this.searchText)
+          },
+        },
+        methods: {
+          copyTextToClipboard(text) {
+            var copyFrom = document.createElement('textarea')
+            copyFrom.textContent = text
+            document.body.appendChild(copyFrom)
+            copyFrom.select()
+            document.execCommand('copy')
+            copyFrom.blur()
+            document.body.removeChild(copyFrom)
+          },
+        },
+      })
+      const setStatus = (text) => async (x) => {
+        vm.status = text
+        await new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r)),
+        )
+        return x
+      }
+      fetch('https://unpkg.com/tailwindcss/dist/tailwind.css')
+        .then(setStatus('Reading Tailwind CSS source...'))
+        .then((r) => r.text())
+        .then(setStatus('Parsing CSS...'))
+        .then((css) => {
+          const ast = csstree.toPlainObject(csstree.parse(css))
+          const items = []
+          const walk = (tree, prefix) => {
+            for (const child of tree.children) {
+              if (child.type === 'Comment') {
+                // skip
+              } else if (child.type === 'Rule') {
+                const selector = csstree.generate(child.prelude)
+                const classes = []
+                csstree.walk(child.prelude, {
+                  visit: 'ClassSelector',
+                  enter(node) {
+                    classes.push(node.name)
+                  },
+                })
+                if (classes.length === 0) {
+                  // skip
+                } else if (classes.length > 1) {
+                  console.log('Found more than 1 classes:', selector)
+                } else if (child.block) {
+                  const declarations = child.block.children
+                    .map((node) => {
+                      if (node.type !== 'Declaration') {
+                        console.warn('Non-declaration found', node)
+                        return
+                      }
+                      return {
+                        property: node.property,
+                        value: csstree.generate(node.value),
+                        important: node.important,
+                      }
+                    })
+                    .filter((x) => x)
+                  if (declarations.length) {
+                    const add =
+                      selector === `.${classes[0]}`
+                        ? []
+                        : [selector.replace(`.${classes[0]}`, '&')]
+                    const css = [...prefix, ...add].reduceRight(
+                      (css, prefix) => {
+                        return `${prefix} { ${css} }`
+                      },
+                      child.block.children
+                        .map((node) => csstree.generate(node))
+                        .join('; '),
+                    )
+                    items.push({
+                      prefix,
+                      selector,
+                      className: classes[0].replace(/\\(.)/g, '$1'),
+                      declarations,
+                      css,
+                    })
+                  } else {
+                    console.log('No declaration found', child)
+                  }
+                }
+              } else if (child.type === 'Atrule') {
+                const prelude = `@${child.name} ${csstree.generate(
+                  child.prelude,
+                )}`
+                if (child.block) {
+                  walk(child.block, [...prefix, prelude])
+                }
+              } else {
+                console.log('Unhandled', child.type)
+              }
+            }
+          }
+          walk(ast, [])
+          return items
+        })
+        .then(setStatus('Generating search index...'))
+        .then((items) => {
+          const entries = []
+          const byClassName = new Map()
+          for (const item of items) {
+            const { selector, className, css } = item
+            let entry = byClassName.get(className)
+            if (!entry) {
+              entry = { className, results: [] }
+              entries.push(entry)
+              byClassName.set(className, entry)
+            }
+            entry.results.push({ css })
+            // for (const declaration of item.declarations) {
+            //   entry.results.push({ prefix, declaration })
+            // }
+          }
+          return entries
+        })
+        .then(setStatus('Preparing search index for blazing fast search...'))
+        .then((entries) => {
+          for (const entry of entries) {
+            entry.classNamePrepared = fuzzysort.prepare(entry.className)
+            entry.cssPrepared = fuzzysort.prepare(
+              entry.results.map((r) => r.css).join(' '),
+            )
+          }
+          return entries
+        })
+        .then(
+          setStatus('Ready — Enter utility class name or generated CSS code.'),
+        )
+        .then((entries) => {
+          window.entries = entries
+          const options = {
+            keys: ['classNamePrepared', 'cssPrepared'],
+            limit: 1000,
+            allowTypo: false,
+            threshold: -10000,
+          }
+          vm.search = function search(text) {
+            return fuzzysort.go(text, entries, options).map((r) => r.obj)
+          }
+        })
+    </script>
+  </body>
+</html>

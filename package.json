@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.0",
+    "@tailwindcss/custom-forms": "^0.2.1",
+    "tailwindcss": "^1.2.0"
+  },
+  "scripts": {
+    "css:build": "tailwindcss build tailwind.src.css -o tailwind.css"
+  }
+}
