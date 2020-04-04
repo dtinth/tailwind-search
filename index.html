@@ -42,11 +42,16 @@
         </div>
       </div>
       <div class="flex-1 overflow-scroll scrolling-touch">
-        <ul>
-          <li
-            v-for="entry of matchingEntries"
-            :key="entry.className"
-            class="border-t border-454443 px-4 pt-1 flex"
+        <recycle-scroller
+          class="h-full"
+          :items="matchingEntries"
+          size-field="size"
+          key-field="className"
+          v-slot="{ item: entry }"
+        >
+          <div
+            class="border-t border-454443 px-4 flex"
+            style="padding-top: 5px;"
           >
             <div class="font-mono font-bold w-1/4 flex-none px-3 truncate">
               <a
@@ -61,12 +66,13 @@
                 v-for="result of entry.results"
                 :title="result.key"
                 class="truncate"
+                style="height: 24px;"
               >
                 {{result.css}}
               </div>
             </div>
-          </li>
-        </ul>
+          </div>
+        </recycle-scroller>
       </div>
     </div>
     <script src="https://unpkg.com/css-tree@1.0.0-alpha.39/dist/csstree.min.js"></script>
@@ -83,7 +89,12 @@
         },
         computed: {
           matchingEntries() {
-            return this.search(this.searchText)
+            return this.search(this.searchText).map((entry) => {
+              return {
+                ...entry,
+                size: entry.results.length * 24 + 8,
+              }
+            })
           },
         },
         methods: {
