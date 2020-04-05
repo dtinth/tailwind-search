@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="flex-1 overflow-scroll scrolling-touch">
-        <div v-if="!searchText" class="p-4 h-full flex flex-col">
+        <div v-if="!searchedText" class="p-4 h-full flex flex-col">
           <div class="p-3 text-8b8685 flex-none">
             <p class="text-xl">
               <template v-if="ready">
@@ -201,12 +201,24 @@
           search: () => [],
           status: 'Loading Tailwind CSS source...',
           searchText: '',
+          searchedText: '',
           loadedFile: '',
           ready: false,
         },
+        watch: {
+          searchText() {
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => {
+                if (this.searchedText !== this.searchText) {
+                  this.searchedText = this.searchText
+                }
+              }),
+            )
+          },
+        },
         computed: {
           matchingEntries() {
-            return this.search(this.searchText).map((entry) => {
+            return this.search(this.searchedText).map((entry) => {
               return {
                 ...entry,
                 size: entry.results.length * 24 + 8,
