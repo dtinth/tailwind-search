@@ -12,6 +12,7 @@ const assert = require('assert')
     assert(Array.isArray(searchResults))
     assert(searchResults.length > 0)
     assert.equal(searchResults[0].className, 'text-base')
+    assert.equal(searchResults[0].results[0].css, 'font-size:1rem')
     console.log('ok')
   } catch (error) {
     console.error(error)
