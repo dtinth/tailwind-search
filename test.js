@@ -6,9 +6,9 @@ const assert = require('assert')
     const css = require('fs').readFileSync(
       require.resolve('tailwindcss/dist/tailwind.css'),
     )
-    const out = await tailwindCssClassSearch(css)
-    assert.equal(typeof out.search, 'function')
-    const entries = out.search('font-size')
+    const searchIndex = await tailwindCssClassSearch(css)
+    assert.equal(typeof searchIndex.search, 'function')
+    const entries = searchIndex.search('font-size')
     assert(Array.isArray(entries))
     assert(entries.length > 0)
     assert.equal(entries[0].className, 'text-base')
