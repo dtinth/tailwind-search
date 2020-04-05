@@ -150,47 +150,7 @@
           key-field="className"
           v-slot="{ item: entry }"
         >
-          <div
-            class="border-t border-454443 px-4 flex text-sm"
-            style="padding-top: 6px;"
-          >
-            <div class="font-mono font-bold w-1/4 flex-none px-3 truncate">
-              <a
-                class="text-bbeeff -mx-1 px-1 -my-1 hover:text-black hover:bg-bbeeff"
-                href="javascript:"
-                @click="copyTextToClipboard(entry.className)"
-                >{{entry.className}}</a
-              >
-            </div>
-            <div class="font-mono w-3/4 flex-none pr-3">
-              <div
-                v-for="(result, i) of entry.results"
-                :key="i"
-                class="truncate"
-                style="height: 24px;"
-              >
-                <span
-                  v-for="(prefix, j) of result.prefix"
-                  :key="'pre' + j"
-                  class="text-8b8685"
-                >
-                  {{prefix}} {
-                </span>
-                <css-declaration
-                  :declaration="declaration"
-                  v-for="(declaration, j) of result.declarations"
-                  :key="'declaration' + j"
-                ></css-declaration>
-                <span
-                  v-for="(prefix, j) of result.prefix"
-                  :key="'post' + j"
-                  class="text-8b8685"
-                >
-                  }
-                </span>
-              </div>
-            </div>
-          </div>
+          <entry-row :entry="entry"></entry-row>
         </recycle-scroller>
       </div>
     </div>
@@ -233,6 +193,55 @@
               })
             },
           },
+        })
+      }
+      {
+        // This allows Prettier to format the template using template: html`...`
+        const html = String.raw
+
+        Vue.component('entry-row', {
+          props: ['entry'],
+          template: html`<div
+            class="border-t border-454443 px-4 flex text-sm"
+            style="padding-top: 6px;"
+          >
+            <div class="font-mono font-bold w-1/4 flex-none px-3 truncate">
+              <a
+                class="text-bbeeff -mx-1 px-1 -my-1 hover:text-black hover:bg-bbeeff"
+                href="javascript:"
+                @click="copyTextToClipboard(entry.className)"
+                >{{entry.className}}</a
+              >
+            </div>
+            <div class="font-mono w-3/4 flex-none pr-3">
+              <div
+                v-for="(result, i) of entry.results"
+                :key="i"
+                class="truncate"
+                style="height: 24px;"
+              >
+                <span
+                  v-for="(prefix, j) of result.prefix"
+                  :key="'pre' + j"
+                  class="text-8b8685"
+                >
+                  {{prefix}} {
+                </span>
+                <css-declaration
+                  :declaration="declaration"
+                  v-for="(declaration, j) of result.declarations"
+                  :key="'declaration' + j"
+                ></css-declaration>
+                <span
+                  v-for="(prefix, j) of result.prefix"
+                  :key="'post' + j"
+                  class="text-8b8685"
+                >
+                  }
+                </span>
+              </div>
+            </div>
+          </div>`,
           methods: {
             copyTextToClipboard(text) {
               var copyFrom = document.createElement('textarea')
@@ -245,10 +254,7 @@
             },
           },
         })
-      }
-      {
-        // This allows Prettier to format the template using template: html`...`
-        const html = String.raw
+
         Vue.component('css-declaration', {
           props: ['declaration'],
           computed: {
