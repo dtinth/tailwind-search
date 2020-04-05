@@ -3,10 +3,10 @@
 ;(function (root, factory) {
   // @ts-ignore
   if (typeof define === 'function' && define.amd) {
-    define(['csstree', 'fuzzysort'], factory)
+    define(['css-tree', 'fuzzysort'], factory)
   } else if (typeof module === 'object' && module.exports) {
     // @ts-ignore
-    module.exports = factory(require('csstree'), require('fuzzysort'))
+    module.exports = factory(require('css-tree'), require('fuzzysort'))
   } else {
     // @ts-ignore
     root.tailwindCssClassSearch = factory(root.csstree, root.fuzzysort)
