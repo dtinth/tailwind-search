@@ -11,5 +11,19 @@
   "dependencies": {
     "css-tree": "^1.0.0-alpha.39",
     "fuzzysort": "^1.1.4"
-  }
+  },
+  "name": "@dtinth/tailwind-css-class-search",
+  "description": "Having trouble memorizing all 12526 utility classes in Tailwind? Remembered the CSS code, but did not remember which is the corresponding Tailwind CSS utility class? Search for it here!",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dtinth/tailwind-search.git"
+  },
+  "author": "Thai Pangsakulyanont <org.yi.dttvb@gmail.com> (http://dt.in.th/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dtinth/tailwind-search/issues"
+  },
+  "homepage": "https://github.com/dtinth/tailwind-search#readme"
 }
