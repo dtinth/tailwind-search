@@ -16,7 +16,7 @@ I made this application because I am often confused by Tailwind CSS’ naming of
 
 ## Development
 
-- **No build system needed.** Just clone the Git repository, open `index.html` file in your browser. Edit, save and refresh.
+- **No build system needed.** Just clone the Git repository, open `index.html` file in your browser. Edit, save and refresh. Append `?dev=1` to URL to load full Tailwind CSS file.
 
 ## Usage in Node
 
@@ -35,4 +35,12 @@ searchIndex.entries // => Array(12526)
 
 // Search
 searchIndex.search('font-size') // Array(50)
+```
+
+## Preparing for deployment
+
+Since the full generated tailwind is 1mb large, we use [purgecss](https://purgecss.com/CLI) to remove unused selectors and radios the CSS file size to 20kb.
+
+```
+yarn build
 ```
