@@ -14,7 +14,7 @@
 })(typeof self !== 'undefined' ? self : this, function (csstree, fuzzysort) {
   return async function tailwindCssClassSearch(
     css,
-    { reportStatus = async (text) => {} },
+    { reportStatus = async (text) => {} } = {},
   ) {
     const setStatus = (status) => async (x) => {
       await reportStatus(status)
