@@ -204,62 +204,67 @@
     <script src="https://unpkg.com/fuzzysort@1.1.4/fuzzysort.js"></script>
     <script src="index.js"></script>
     <script>
-      vm = new Vue({
-        el: '#app',
-        data: {
-          search: () => [],
-          status: 'Loading Tailwind CSS source...',
-          searchText: '',
-          searchedText: '',
-          loadedFile: '',
-          totalCount: 0,
-          ready: false,
-        },
-        watch: {
-          searchText() {
-            requestAnimationFrame(() =>
-              requestAnimationFrame(() => {
-                if (this.searchedText !== this.searchText) {
-                  this.searchedText = this.searchText
+      function renderApp() {
+        return new Vue({
+          el: '#app',
+          data: {
+            search: () => [],
+            status: 'Loading Tailwind CSS source...',
+            searchText: '',
+            searchedText: '',
+            loadedFile: '',
+            totalCount: 0,
+            ready: false,
+          },
+          watch: {
+            searchText() {
+              requestAnimationFrame(() =>
+                requestAnimationFrame(() => {
+                  if (this.searchedText !== this.searchText) {
+                    this.searchedText = this.searchText
+                  }
+                }),
+              )
+            },
+          },
+          computed: {
+            matchingEntries() {
+              return this.search(this.searchedText).map((entry) => {
+                return {
+                  ...entry,
+                  size: entry.results.length * 24 + 8,
                 }
-              }),
-            )
+              })
+            },
           },
-        },
-        computed: {
-          matchingEntries() {
-            return this.search(this.searchedText).map((entry) => {
-              return {
-                ...entry,
-                size: entry.results.length * 24 + 8,
+          methods: {
+            copyTextToClipboard(text) {
+              var copyFrom = document.createElement('textarea')
+              copyFrom.textContent = text
+              document.body.appendChild(copyFrom)
+              copyFrom.select()
+              document.execCommand('copy')
+              copyFrom.blur()
+              document.body.removeChild(copyFrom)
+            },
+            style(property, value) {
+              if (property === 'color') {
+                return { color: value }
               }
-            })
+              if (property === 'background-color') {
+                return { background: value }
+              }
+              if (property === 'border-color') {
+                return { outline: `1px solid ${value}` }
+              }
+              return {}
+            },
           },
-        },
-        methods: {
-          copyTextToClipboard(text) {
-            var copyFrom = document.createElement('textarea')
-            copyFrom.textContent = text
-            document.body.appendChild(copyFrom)
-            copyFrom.select()
-            document.execCommand('copy')
-            copyFrom.blur()
-            document.body.removeChild(copyFrom)
-          },
-          style(property, value) {
-            if (property === 'color') {
-              return { color: value }
-            }
-            if (property === 'background-color') {
-              return { background: value }
-            }
-            if (property === 'border-color') {
-              return { outline: `1px solid ${value}` }
-            }
-            return {}
-          },
-        },
-      })
+        })
+      }
+    </script>
+
+    <script>
       const reportStatus = async (text) => {
         vm.status = text
         await new Promise((r) =>
@@ -290,6 +295,7 @@
           console.error(e)
         }
       }
+      vm = renderApp()
       loadTailwindCSS('https://unpkg.com/tailwindcss/dist/tailwind.css')
     </script>
     <script>
