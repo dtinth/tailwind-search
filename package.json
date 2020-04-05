@@ -4,6 +4,9 @@
     "@tailwindcss/custom-forms": "^0.2.1",
     "tailwindcss": "^1.2.0"
   },
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "node test.js",
     "css:build": "tailwindcss build tailwind.src.css -o tailwind.css"
