@@ -19,6 +19,7 @@ module.exports = {
         '"Noto Color Emoji"',
       ],
       mono: [
+        'Comic Mono',
         'Cousine',
         'Menlo',
         'Monaco',
