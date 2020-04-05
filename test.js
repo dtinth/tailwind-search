@@ -7,7 +7,7 @@ const assert = require('assert')
       require.resolve('tailwindcss/dist/tailwind.css'),
     )
     const out = await tailwindCssClassSearch(css)
-
+    assert.equal(typeof out.search, 'function')
     console.log('ok')
   } catch (error) {
     console.error(error)
