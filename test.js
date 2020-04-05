@@ -8,6 +8,8 @@ const assert = require('assert')
     )
     const out = await tailwindCssClassSearch(css)
     assert.equal(typeof out.search, 'function')
+    const searchResults = out.search('font-size')
+    assert(Array.isArray(searchResults))
     console.log('ok')
   } catch (error) {
     console.error(error)
