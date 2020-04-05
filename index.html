@@ -261,12 +261,6 @@
           )
           .then(({ entries, search }) => {
             window.entries = entries
-            const options = {
-              keys: ['classNamePrepared', 'cssPrepared'],
-              limit: 1000,
-              allowTypo: false,
-              threshold: -10000,
-            }
             vm.search = search
           })
       }
