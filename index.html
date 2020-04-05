@@ -54,7 +54,7 @@
         </p>
       </div>
       <div
-        class="border-t border-656463 bg-454443 px-4 flex font-bold text-8b8685 text-sm uppercase"
+        class="border-t border-656463 bg-454443 px-4 flex font-bold text-8b8685 text-xs uppercase"
       >
         <div class="w-1/4 flex-none px-3">
           class
@@ -107,8 +107,8 @@
           v-slot="{ item: entry }"
         >
           <div
-            class="border-t border-454443 px-4 flex"
-            style="padding-top: 5px;"
+            class="border-t border-454443 px-4 flex text-sm"
+            style="padding-top: 6px;"
           >
             <div class="font-mono font-bold w-1/4 flex-none px-3 truncate">
               <a
@@ -120,12 +120,33 @@
             </div>
             <div class="font-mono w-3/4 flex-none pr-3">
               <div
-                v-for="result of entry.results"
-                :title="result.key"
+                v-for="(result, i) of entry.results"
+                :key="i"
                 class="truncate"
                 style="height: 24px;"
               >
-                {{result.css}}
+                <span
+                  v-for="(prefix, j) of result.prefix"
+                  :key="'pre' + j"
+                  class="text-8b8685"
+                >
+                  {{prefix}} {
+                </span>
+                <span
+                  v-for="({property, value}, j) of result.declarations"
+                  :key="'prop' + j"
+                >
+                  <span style="color: #73fcd6;">{{property}}</span
+                  ><span class="text-8b8685">: </span><span>{{value}}</span
+                  ><span class="text-8b8685">; </span>
+                </span>
+                <span
+                  v-for="(prefix, j) of result.prefix"
+                  :key="'post' + j"
+                  class="text-8b8685"
+                >
+                  }
+                </span>
               </div>
             </div>
           </div>
@@ -133,7 +154,7 @@
       </div>
     </div>
     <script src="https://unpkg.com/css-tree@1.0.0-alpha.39/dist/csstree.min.js"></script>
-    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-virtual-scroller@1.0.4/dist/vue-virtual-scroller.min.js"></script>
     <script src="https://unpkg.com/fuzzysort@1.1.4/fuzzysort.js"></script>
     <script>
@@ -217,10 +238,12 @@
                       })
                       .filter((x) => x)
                     if (declarations.length) {
+                      const filteredSelector = selector.replace(
+                        `.${classes[0]}`,
+                        '&',
+                      )
                       const add =
-                        selector === `.${classes[0]}`
-                          ? []
-                          : [selector.replace(`.${classes[0]}`, '&')]
+                        filteredSelector === `&` ? [] : [filteredSelector]
                       const css = [...prefix, ...add].reduceRight(
                         (css, prefix) => {
                           return `${prefix} { ${css} }`
@@ -230,8 +253,7 @@
                           .join('; '),
                       )
                       items.push({
-                        prefix,
-                        selector,
+                        prefix: [...prefix, ...add],
                         className: classes[0].replace(/\\(.)/g, '$1'),
                         declarations,
                         css,
@@ -260,17 +282,14 @@
             const entries = []
             const byClassName = new Map()
             for (const item of items) {
-              const { selector, className, css } = item
+              const { prefix, className, css, declarations } = item
               let entry = byClassName.get(className)
               if (!entry) {
                 entry = { className, results: [] }
                 entries.push(entry)
                 byClassName.set(className, entry)
               }
-              entry.results.push({ css })
-              // for (const declaration of item.declarations) {
-              //   entry.results.push({ prefix, declaration })
-              // }
+              entry.results.push({ css, prefix, declarations })
             }
             return entries
           })
