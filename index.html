@@ -176,15 +176,11 @@
                 >
                   {{prefix}} {
                 </span>
-                <span
-                  v-for="({property, value}, j) of result.declarations"
-                  :key="'prop' + j"
-                >
-                  <span style="color: #73fcd6;">{{property}}</span
-                  ><span class="text-8b8685">: </span
-                  ><span :style="style(property, value)">{{value}}</span
-                  ><span class="text-8b8685">; </span>
-                </span>
+                <css-declaration
+                  :declaration="declaration"
+                  v-for="(declaration, j) of result.declarations"
+                  :key="'declaration' + j"
+                ></css-declaration>
                 <span
                   v-for="(prefix, j) of result.prefix"
                   :key="'post' + j"
@@ -247,6 +243,29 @@
               copyFrom.blur()
               document.body.removeChild(copyFrom)
             },
+          },
+        })
+      }
+      {
+        // This allows Prettier to format the template using template: html`...`
+        const html = String.raw
+        Vue.component('css-declaration', {
+          props: ['declaration'],
+          computed: {
+            property() {
+              return this.declaration.property
+            },
+            value() {
+              return this.declaration.value
+            },
+          },
+          template: html`<span>
+            <span style="color: #73fcd6;">{{property}}</span
+            ><span class="text-8b8685">: </span
+            ><span :style="style(property, value)">{{value}}</span
+            ><span class="text-8b8685">; </span>
+          </span>`,
+          methods: {
             style(property, value) {
               if (property === 'color') {
                 return { color: value }
