@@ -11,6 +11,7 @@ const assert = require('assert')
     const searchResults = out.search('font-size')
     assert(Array.isArray(searchResults))
     assert(searchResults.length > 0)
+    assert.equal(searchResults[0].className, 'text-base')
     console.log('ok')
   } catch (error) {
     console.error(error)
