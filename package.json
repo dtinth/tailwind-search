@@ -5,6 +5,7 @@
     "tailwindcss": "^1.2.0"
   },
   "scripts": {
+    "test": "node test.js",
     "css:build": "tailwindcss build tailwind.src.css -o tailwind.css"
   },
   "dependencies": {
