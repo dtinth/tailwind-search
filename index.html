@@ -231,10 +231,6 @@
           },
         },
       })
-      const setStatus = (text) => async (x) => {
-        await reportStatus(text)
-        return x
-      }
       const reportStatus = async (text) => {
         vm.status = text
         await new Promise((r) =>
