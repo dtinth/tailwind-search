@@ -2,7 +2,7 @@
 
 Having trouble memorizing all 12526 utility classes in Tailwind? Remembered the CSS code, but did not remember which is the corresponding Tailwind CSS utility class? [Search for it here!](https://tailwind.spacet.me/)
 
-This little web application parses Tailwind CSS file right from `unpkg.com`, and generates a searchable index that lets you search for a utility class’s name, if you know the generated CSS code you want.
+This little web application parses the Tailwind CSS file right from `unpkg.com` using [css-tree](https://www.npmjs.com/package/css-tree), and generates a searchable index that lets you search for a utility class’s name, if you know the generated CSS code you want. The web app is built with [Vue.js](https://vuejs.org/), fast fuzzy-searching is provided by [fuzzysort](https://www.npmjs.com/package/fuzzysort) and the result list is lazily rendered with help of [vue-virtual-scroller](https://www.npmjs.com/package/vue-virtual-scroller).
 
 [![Screenshot](https://github.com/dtinth/timelapse/raw/master/projects/tailwind-search_results.png)](https://tailwind.spacet.me/)
 
@@ -17,3 +17,22 @@ I made this application because I am often confused by Tailwind CSS’ naming of
 ## Development
 
 - **No build system needed.** Just clone the Git repository, open `index.html` file in your browser. Edit, save and refresh.
+
+## Usage in Node
+
+```js
+const fs = require('fs')
+const tailwindCssClassSearch = require('@dtinth/tailwind-css-class-search')
+
+// Read CSS file
+const css = fs.readFileSync(require.resolve('tailwindcss/dist/tailwind.css'))
+
+// Generate a search index
+const searchIndex = await tailwindCssClassSearch(css)
+
+// Inspect all entries
+searchIndex.entries // => Array(12526)
+
+// Search
+searchIndex.search('font-size') // Array(50)
+```
