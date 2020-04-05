@@ -241,28 +241,28 @@
           requestAnimationFrame(() => requestAnimationFrame(r)),
         )
       }
-      function loadTailwindCSS(url) {
-        return fetch(url)
-          .then(setStatus('Reading Tailwind CSS source...'))
-          .then((r) => {
-            vm.loadedFile = r.url
-            return r.text()
+      async function loadTailwindCSS(url) {
+        try {
+          const response = await fetch(url)
+          vm.loadedFile = response.url
+
+          await reportStatus('Reading Tailwind CSS source...')
+          const css = await response.text()
+
+          const { entries, search } = await tailwindCssClassSearch(css, {
+            reportStatus,
           })
-          .then(setStatus('Parsing CSS...'))
-          .then((css) => {
-            return tailwindCssClassSearch(css, {
-              reportStatus,
-            })
-          })
-          .then(
-            setStatus(
-              'Ready — Enter utility class name or generated CSS code.',
-            ),
-          )
-          .then(({ entries, search }) => {
-            window.entries = entries
-            vm.search = search
-          })
+
+          // Provide access to all entries
+          window.entries = entries
+
+          // Inject search function
+          vm.search = search
+          vm.ready = true
+        } catch (e) {
+          await reportStatus('Failed: ' + e)
+          console.error(e)
+        }
       }
       loadTailwindCSS('https://unpkg.com/tailwindcss/dist/tailwind.css')
     </script>
