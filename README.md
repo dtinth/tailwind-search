@@ -39,7 +39,7 @@ searchIndex.search('font-size') // Array(50)
 
 ## Preparing for deployment
 
-Since the full generated tailwind is 1mb large, we use [purgecss](https://purgecss.com/CLI) to remove unused selectors and radios the CSS file size to 20kb.
+Since the full generated tailwind is 1mb large, we use [purgecss](https://purgecss.com/CLI) to remove unused selectors and reduce the CSS file size to 20kb.
 
 ```
 yarn build
