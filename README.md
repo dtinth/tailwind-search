@@ -1,6 +1,6 @@
 # @dtinth’s Tailwind CSS Class Search
 
-Having trouble memorizing all 12526 utility classes in Tailwind? Remembered the CSS code, but did not remember which is the corresponding Tailwind CSS utility class? [Search for it here!](https://tailwind.spacet.me/)
+Having trouble memorizing all the utility classes in Tailwind? Remembered the CSS code, but did not remember which is the corresponding Tailwind CSS utility class? [Search for it here!](https://tailwind.spacet.me/)
 
 This little web application parses the Tailwind CSS file right from `unpkg.com` using [css-tree](https://www.npmjs.com/package/css-tree), and generates a searchable index that lets you search for a utility class’s name, if you know the generated CSS code you want. The web app is built with [Vue.js](https://vuejs.org/), fast fuzzy-searching is provided by [fuzzysort](https://www.npmjs.com/package/fuzzysort) and the result list is lazily rendered with help of [vue-virtual-scroller](https://www.npmjs.com/package/vue-virtual-scroller).
 

@@ -75,9 +75,11 @@
           </h1>
           <p class="inline">
             <span class="text-8b8685">—</span>
-            Having trouble memorizing all 12526 utility classes in Tailwind?
-            Remembered the CSS code, but did not remember which is the
-            corresponding Tailwind CSS utility class? Search for it here!
+            Having trouble memorizing all
+            <template v-if="totalCount">{{totalCount}}</template
+            ><span v-else>the</span> utility classes in Tailwind? Remembered the
+            CSS code, but did not remember which is the corresponding Tailwind
+            CSS utility class? Search for it here!
           </p>
         </div>
         <p>
@@ -210,6 +212,7 @@
           searchText: '',
           searchedText: '',
           loadedFile: '',
+          totalCount: 0,
           ready: false,
         },
         watch: {
@@ -281,6 +284,7 @@
           // Inject search function
           vm.search = search
           vm.ready = true
+          vm.totalCount = entries.length
         } catch (e) {
           await reportStatus('Failed: ' + e)
           console.error(e)
