@@ -237,6 +237,12 @@
         )
         return x
       }
+      const reportStatus = async (text) => {
+        vm.status = text
+        await new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r)),
+        )
+      }
       function loadTailwindCSS(url) {
         return fetch(url)
           .then(setStatus('Reading Tailwind CSS source...'))
