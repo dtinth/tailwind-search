@@ -892,7 +892,7 @@ video {
   background-color: #090807;
 }
 
-.bg-bbeeff {
+.hover\:bg-bbeeff:hover {
   background-color: #bbeeff;
 }
 
@@ -901,6 +901,10 @@ video {
 }
 
 .border-656463 {
+  border-color: #656463;
+}
+
+.hover\:border-656463:hover {
   border-color: #656463;
 }
 
@@ -1057,10 +1061,6 @@ video {
   text-align: center;
 }
 
-.text-black {
-  color: #000;
-}
-
 .text-e9e8e7 {
   color: #e9e8e7;
 }
@@ -1075,6 +1075,10 @@ video {
 
 .text-d7fc70 {
   color: #d7fc70;
+}
+
+.hover\:text-black:hover {
+  color: #000;
 }
 
 .text-xs {
@@ -1107,12 +1111,12 @@ video {
   white-space: nowrap;
 }
 
-.w-1 {
-  width: 0.25rem;
+.w-1\/4 {
+  width: 25%;
 }
 
-.w-3 {
-  width: 0.75rem;
+.w-3\/4 {
+  width: 75%;
 }
 
 .w-full {

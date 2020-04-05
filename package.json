@@ -12,7 +12,7 @@
     "build": "make",
     "test": "node test.js",
     "css:build": "tailwindcss build tailwind.src.css -o generated/css-full/tailwind.css",
-    "css:purge": "purgecss --content index.html --css generated/css-full/tailwind.css --output generated/css-purged"
+    "css:purge": "purgecss --content index.html --css generated/css-full/tailwind.css --output generated/css-purged --config purgecss.config.js"
   },
   "dependencies": {
     "css-tree": "^1.0.0-alpha.39",
