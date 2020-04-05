@@ -56,7 +56,11 @@
       rel="stylesheet"
       href="https://unpkg.com/comic-mono@0.0.1/index.css"
     />
-    <link rel="stylesheet" href="tailwind.css" />
+    <link
+      id="mainStylesheet"
+      rel="stylesheet"
+      href="generated/css-purged/tailwind.css"
+    />
   </head>
   <body class="bg-353433 text-e9e8e7">
     <div id="app" class="absolute inset-0 flex flex-col">
@@ -280,6 +284,12 @@
         }
       }
       loadTailwindCSS('https://unpkg.com/tailwindcss/dist/tailwind.css')
+    </script>
+    <script>
+      // Load full CSS when developing locally
+      if (location.protocol === 'file:') {
+        mainStylesheet.href = 'generated/css-full/tailwind.css'
+      }
     </script>
   </body>
 </html>
