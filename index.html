@@ -137,7 +137,8 @@
                   :key="'prop' + j"
                 >
                   <span style="color: #73fcd6;">{{property}}</span
-                  ><span class="text-8b8685">: </span><span>{{value}}</span
+                  ><span class="text-8b8685">: </span
+                  ><span :style="style(property, value)">{{value}}</span
                   ><span class="text-8b8685">; </span>
                 </span>
                 <span
@@ -185,6 +186,18 @@
             document.execCommand('copy')
             copyFrom.blur()
             document.body.removeChild(copyFrom)
+          },
+          style(property, value) {
+            if (property === 'color') {
+              return { color: value }
+            }
+            if (property === 'background-color') {
+              return { background: value }
+            }
+            if (property === 'border-color') {
+              return { outline: `1px solid ${value}` }
+            }
+            return {}
           },
         },
       })
