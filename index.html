@@ -78,7 +78,7 @@
             type="search"
             v-model="searchText"
             class="block w-full form-input bg-090807 border-454443 hover:border-656463 shadow placeholder-8b8685"
-            :placeholder="status"
+            placeholder="Search by utility class name or generated CSS code"
           />
         </p>
       </div>
@@ -96,7 +96,12 @@
         <div v-if="!searchText" class="p-4 h-full flex flex-col">
           <div class="p-3 text-8b8685 flex-none">
             <p class="text-xl">
-              Please enter a search term above to get started.
+              <template v-if="ready">
+                Ready — Please enter a search term above to get started.
+              </template>
+              <template v-else>
+                Please wait — {{status}}
+              </template>
             </p>
             <p class="mt-2" v-if="loadedFile">
               Searching in: {{loadedFile}}
@@ -196,6 +201,7 @@
           status: 'Loading Tailwind CSS source...',
           searchText: '',
           loadedFile: '',
+          ready: false,
         },
         computed: {
           matchingEntries() {
