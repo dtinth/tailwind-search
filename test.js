@@ -10,6 +10,7 @@ const assert = require('assert')
     assert.equal(typeof out.search, 'function')
     const searchResults = out.search('font-size')
     assert(Array.isArray(searchResults))
+    assert(searchResults.length > 0)
     console.log('ok')
   } catch (error) {
     console.error(error)
