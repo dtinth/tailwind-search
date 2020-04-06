@@ -44,3 +44,7 @@ Since the full generated tailwind is 1mb large, we use [purgecss](https://purgec
 ```
 yarn build
 ```
+
+## VS Code integration
+
+See the [`contrib/vscode` folder](./contrib/vscode) for more info on experimental VS Code integration.
