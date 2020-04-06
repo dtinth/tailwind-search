@@ -1,6 +1,6 @@
 # [@dtinth’s Tailwind CSS Class Search](../..) — VS Code Integration
 
-A [VS Code Power Tools](https://marketplace.visualstudio.com/items?itemName=ego-digital.vscode-powertools) [Command](https://github.com/egodigital/vscode-powertools/wiki/Commands) that lets you search a Tailwind CSS Class by its generated CSS. This integration is experimental and is not officially supported (although pull requests are welcome). Its goal is to demonstrate how the [`@dtinth/tailwind-css-class-search` library](https://unpkg.com/@dtinth/tailwind-css-class-search) can be integrated into a text editor to provide the same functionality as [the webapp](https://tailwind.spacet.me/). Maybe someone can use this to create an actual VS Code extension (left as an exercise for the reader).
+A [VS Code Power Tools](https://marketplace.visualstudio.com/items?itemName=ego-digital.vscode-powertools) [Command](https://github.com/egodigital/vscode-powertools/wiki/Commands) that lets you search a Tailwind CSS Class by its generated CSS. This integration is experimental and is not officially supported (although pull requests are welcome). Its goal is to demonstrate how the [`@dtinth/tailwind-css-class-search` library](https://www.npmjs.com/package/@dtinth/tailwind-css-class-search) can be integrated into a text editor to provide the same functionality as [the webapp](https://tailwind.spacet.me/). Maybe someone can use this to create an actual VS Code extension (left as an exercise for the reader).
 
 ![Demo gif](./demo.gif)
 
