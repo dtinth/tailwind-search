@@ -272,6 +272,10 @@
             ><span class="text-8b8685">; </span>
           </span>`,
           methods: {
+            isColorProperty (value) {
+              const colorProperties = ['color', 'background-color', 'border-color']
+              return colorProperties.includes(value)
+            },
             style(property, value) {
               if (property === 'color') {
                 return { color: value }
