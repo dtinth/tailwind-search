@@ -268,7 +268,13 @@
           template: html`<span>
             <span style="color: #73fcd6;">{{property}}</span
             ><span class="text-8b8685">: </span
-            ><span :style="style(property, value)">{{value}}</span
+            >
+            <span
+              v-if="isColorProperty(property)"
+              style="width: 10px; height: 10px; border: 1px solid black; display: inline-block;"
+              :style="{ backgroundColor: value }">
+            </span>
+            <span>{{value}}</span
             ><span class="text-8b8685">; </span>
           </span>`,
           methods: {
